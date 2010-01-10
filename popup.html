@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <link href="popup.css" type="text/css" rel="stylesheet"/>
+        <script>
+            function init() {
+                var startButton = document.getElementById("startButton");
+                var cancelButton = document.getElementById("cancelButton");
+                var minutesText = document.getElementById("minutesText");
+                var backgroundPage = chrome.extension.getBackgroundPage();
+
+                var start = function() {
+                    var minutes = parseInt(minutesText.value);
+                    backgroundPage[startButton.value](minutes);
+                    window.close();
+                };
+
+                var cancel = function() {
+                    backgroundPage.cancel();
+                    window.close();
+                };
+
+                startButton.addEventListener("click", start, false);
+                cancelButton.addEventListener("click", cancel, false);
+
+                var running = backgroundPage.running();
+                var paused = backgroundPage.paused();
+
+                startButton.value = (running) ? "pause"
+                    : (paused) ? "resume"
+                    : "start";
+                cancelButton.disabled = !(running || paused);
+
+                minutesText.focus();
+            }
+        </script>
+    </head>
+    <body onload="init();">
+        <label for="minutesText">Minutes<input type="text" id="minutesText"/></label>
+        <input type="button" id="startButton" value="start"/>
+        <input type="button" id="cancelButton" value="cancel"/>
+    </body>
+</html>

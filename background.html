@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <script>
+            var pollInterval = 1000;
+            var timer = null;
+            var minuteMillis = 60 * 1000;
+            var endMillis = null;
+            var millisLeft = null;
+
+            // console.log("hello world");
+
+            var now = function() {
+                return (new Date()).getTime();
+            };
+
+            var startTimer = function() {
+                timer = setInterval(updateBadge, pollInterval);
+            };
+
+            var pauseTimer = function() {
+                clearInterval(timer);
+            };
+
+            var cancelTimer = function() {
+                clearInterval(timer);
+                timer = null;
+            };
+
+            var start = function(minutes) {
+                var nowMillis = now();
+                endMillis = nowMillis + minutes * minuteMillis;
+                updateBadge();
+                startTimer();
+            };
+
+            var pause = function() {
+                var nowMillis = now();
+                millisLeft = (endMillis - nowMillis);
+                pauseTimer();
+            };
+
+            var resume = function() {
+                var nowMillis = now();
+                endMillis = nowMillis + millisLeft;
+                millisLeft = null;
+                startTimer();
+            };
+
+            var cancel = function() {
+                millisLeft = null;
+                cancelTimer();
+            };
+
+            var updateBadge = function() {
+                var nowMillis = now();
+                var minutesLeft = (endMillis - nowMillis) / minuteMillis;
+                var minutesLeft = Math.ceil(minutesLeft);
+                if (minutesLeft <= 0) {
+                    cancel();
+                    alert("job complete");
+                }
+                chrome.browserAction.setBadgeText({text: "" + minutesLeft});
+            };
+
+            var running = function() {
+                return timer && (millisLeft === null);
+            };
+
+            var paused = function() {
+                return (millisLeft !== null);
+            };
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
