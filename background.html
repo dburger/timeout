@@ -70,28 +70,24 @@
                 return (millisLeft !== null);
             };
 
-            var tabsAddOverlay = function() {
+            var tellAllTabs = function(msg, callback) {
                 chrome.windows.getAll({populate: true}, function(windows) {
                     for (var i = 0, l = windows.length; i < l; ++i) {
                         var window = windows[i];
                         for (var j = 0, k = window.tabs.length; j < k; ++j) {
                             var tab = window.tabs[j];
-                            chrome.tabs.sendRequest(tab.id, {op: "add"}, tabsRemoveOverlay);
+                            chrome.tabs.sendRequest(tab.id, msg, callback);
                         }
                     }
                 });
             };
 
+            var tabsAddOverlay = function() {
+                tellAllTabs({op: "add"}, tabsRemoveOverlay);
+            };
+
             var tabsRemoveOverlay = function() {
-                chrome.windows.getAll({populate: true}, function(windows) {
-                    for (var i = 0, l = windows.length; i < l; ++i) {
-                        var window = windows[i];
-                        for (var j = 0, k = window.tabs.length; j < k; ++j) {
-                            var tab = window.tabs[j];
-                            chrome.tabs.sendRequest(tab.id, {op: "remove"});
-                        }
-                    }
-                });
+                tellAllTabs({op: "remove"});
             };
 
             var alarm = function() {
