@@ -3,10 +3,16 @@
   "description": "Trying to iterate an extension.",
   "version": "0.9",
   "background_page": "background.html",
-  "permissions": ["http://*/*", "https://*/*"],
   "browser_action": {
     "default_title": "hello world",
     "default_icon": "icon.png",
     "popup": "popup.html"
-  }
+  },
+  "content_scripts": [{
+    "matches": ["http://*/*", "https://*/*", "file:///*"],
+    "js": ["content_script.js"],
+    "run_at": "document_end",
+    "all_frames": false
+  }],
+  "permissions": ["tabs", "http://*/*", "https://*/*"]
 }

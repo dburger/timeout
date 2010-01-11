@@ -5,6 +5,7 @@
             function init() {
                 var startButton = document.getElementById("startButton");
                 var cancelButton = document.getElementById("cancelButton");
+                var alarmButton = document.getElementById("alarmButton");
                 var minutesText = document.getElementById("minutesText");
                 var backgroundPage = chrome.extension.getBackgroundPage();
 
@@ -19,8 +20,13 @@
                     window.close();
                 };
 
+                var alarm = function() {
+                    backgroundPage.alarm();
+                };
+
                 startButton.addEventListener("click", start, false);
                 cancelButton.addEventListener("click", cancel, false);
+                alarmButton.addEventListener("click", alarm, false);
 
                 var running = backgroundPage.running();
                 var paused = backgroundPage.paused();
@@ -38,5 +44,6 @@
         <label for="minutesText">Minutes<input type="text" id="minutesText"/></label>
         <input type="button" id="startButton" value="start"/>
         <input type="button" id="cancelButton" value="cancel"/>
+        <input type="button" id="alarmButton" value="alarm"/>
     </body>
 </html>
