@@ -57,7 +57,7 @@
                 var minutesLeft = Math.ceil(minutesLeft);
                 if (minutesLeft <= 0) {
                     cancel();
-                    alert("job complete");
+                    fireAlarm();
                 }
                 chrome.browserAction.setBadgeText({text: "" + minutesLeft});
             };
@@ -90,7 +90,7 @@
                 tellAllTabs({op: "remove"});
             };
 
-            var alarm = function() {
+            var fireAlarm = function() {
                 tabsAddOverlay();
             };
         </script>
