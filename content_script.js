@@ -13,7 +13,10 @@ badge.style.marginLeft = badge.style.marginTop = "-50px";
 badge.style.background = "yellow";
 badge.innerHTML = "OK, Back to Work!";
 
-var addOverlay = function() {
+var addOverlay = function(callback) {
+    badge.onclick = function () {
+        callback();
+    };
     document.body.appendChild(overlay);
     document.body.appendChild(badge);
 };
@@ -25,11 +28,10 @@ var removeOverlay = function() {
 
 chrome.extension.onRequest.addListener(function(msg, sender, callback) {
     if (msg.op === "add") {
-        badge.onclick = function () {
-            callback();
-        };
-        addOverlay();
-    } else {
+        addOverlay(callback);
+    } else if (msg.op === "remove") {
         removeOverlay();
+    } else {
+        // problem
     }
 });
