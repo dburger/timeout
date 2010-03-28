@@ -11,6 +11,9 @@ badge.style.width = badge.style.height = "100px";
 badge.style.left = badge.style.top = "50%";
 badge.style.marginLeft = badge.style.marginTop = "-50px";
 badge.style.background = "yellow";
+badge.style.border = "2px solid black";
+badge.style.webkitBorderRadius = "5px";
+badge.style.padding = "5px";
 badge.innerHTML = "OK, Back to Work!";
 
 var addOverlay = function(callback) {
