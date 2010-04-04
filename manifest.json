@@ -1,12 +1,12 @@
 {
-  "name": "Iterative Extension",
-  "description": "Trying to iterate an extension.",
-  "version": "0.9",
+  "name": "Timeout",
+  "description": "Take a timeout.",
+  "version": "0.1",
   "background_page": "background.html",
   "browser_action": {
     "default_title": "hello world",
     "default_icon": "icon.png",
-    "popup": "popup.html"
+    "default_popup": "popup.html"
   },
   "content_scripts": [{
     "matches": ["http://*/*", "https://*/*", "file:///*"],
