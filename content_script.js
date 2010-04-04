@@ -1,40 +1,25 @@
-var overlay = document.createElement("div");
-overlay.style.position = "fixed";
-overlay.style.left = overlay.style.top = 0;
-overlay.style.width = overlay.style.height = "100%";
-overlay.style.background = "white";
-overlay.style.opacity = 0.9;
-
-var badge = document.createElement("div");
-badge.style.position = "fixed";
-badge.style.width = badge.style.height = "100px";
-badge.style.left = badge.style.top = "50%";
-badge.style.marginLeft = badge.style.marginTop = "-50px";
-badge.style.background = "yellow";
-badge.style.border = "2px solid black";
-badge.style.webkitBorderRadius = "5px";
-badge.style.padding = "5px";
-badge.innerHTML = "OK, Back to Work!";
+var overlay = $("<div>", {"class": "overlay"});
+var dialog = $("<div>", {
+    "class": "dialog",
+    html: "<p>Timeout over, back to work!</p><p>(click to dismiss)</p>"});
 
 var addOverlay = function(callback) {
-    badge.onclick = function () {
+    dialog.click(function (evt) {
         callback();
-    };
-    document.body.appendChild(overlay);
-    document.body.appendChild(badge);
+    });
+    $(document.body).append(overlay);
+    $(document.body).append(dialog);
 };
 
 var removeOverlay = function() {
-    document.body.removeChild(overlay);
-    document.body.removeChild(badge);
+    overlay.remove();
+    dialog.remove();
 };
 
 chrome.extension.onRequest.addListener(function(msg, sender, callback) {
     if (msg.op === "add") {
         addOverlay(callback);
-    } else if (msg.op === "remove") {
+    } else { // msg.op === "remove"
         removeOverlay();
-    } else {
-        // problem
     }
 });
