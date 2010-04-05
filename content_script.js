@@ -7,8 +7,8 @@ var addOverlay = function(callback) {
     dialog.click(function (evt) {
         callback();
     });
-    $(document.body).append(overlay);
-    $(document.body).append(dialog);
+    overlay.appendTo(document.body);
+    dialog.appendTo(document.body);
 };
 
 var removeOverlay = function() {
