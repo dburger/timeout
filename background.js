@@ -7,6 +7,7 @@ var timer = (function() {
     var millisLeft = null;
     var expired = false;
     var observers = [];
+    var popupObserver;
 
     var cancelTimer = function() {
         clearInterval(timer);
@@ -82,6 +83,10 @@ var timer = (function() {
         addObserver: function(observer) {
             observers.push(observer);
         },
+        addPopupObserver: function(observer) {
+            popupObserver = observer;
+            observers.push(observer);
+        },
         removeObserver: function(observer) {
             $.each(observers.slice(0), function(i, o) {
                 if (o === observer) {
@@ -124,4 +129,17 @@ timer.addObserver(function(time) {
     var minutes = time.min;
     if (time.sec > 0) minutes++;
     chrome.browserAction.setBadgeText({text: "" + minutes});
+});
+
+/*
+   For the longer story see popup.js.  The problem is that the popup does not
+   fire its unload event - and thus cannot unregister itself as an observer
+   of timer events at the appropriate time.  Thus we allow it to connect via
+   a port, give it a special addPopupObserver to store a reference to it,
+   and handle its timer.removeObserver call on disconnect.
+ */
+chrome.extension.onConnect.addListener(function(port) {
+    port.onDisconnect.addListener(function() {
+        timer.removeObserver(popupObserver);
+    });
 });
