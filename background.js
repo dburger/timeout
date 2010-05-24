@@ -1,6 +1,6 @@
 var timer = (function() {
     var POLL_INTERVAL = 1000;
-    var timer = null;
+    var timerx = null;
     var MSEC_PER_SECOND = 1000;
     var MSEC_PER_MINUTE = 60 * MSEC_PER_SECOND;
     var endMillis = null;
@@ -10,8 +10,8 @@ var timer = (function() {
     var popupObserver;
 
     var cancelTimer = function() {
-        clearInterval(timer);
-        timer = null;
+        clearInterval(timerx);
+        timerx = null;
     }
 
     var fireAlarm = function() {
@@ -20,7 +20,7 @@ var timer = (function() {
     };
 
     var notify = function() {
-        var millis = millisLeft();
+        var millis = endMillis - nowMillis();
         var time = millisToMinSec(millis);
         $.each(observers.slice(0), function(i, o) {
             o(time);
@@ -29,10 +29,6 @@ var timer = (function() {
             cancelTimer();
             fireAlarm();
         }
-    };
-
-    var millisLeft = function() {
-        return endMillis - nowMillis();
     };
 
     var millisToMinSec = function(millis) {
@@ -47,7 +43,7 @@ var timer = (function() {
     };
 
     var startTimer = function() {
-        timer = setInterval(notify, POLL_INTERVAL);
+        timerx = setInterval(notify, POLL_INTERVAL);
     };
 
     var tabsAddOverlay = function() {
@@ -103,7 +99,7 @@ var timer = (function() {
         pause: function() {
             var nowMillis = nowMillis();
             millisLeft = (endMillis - nowMillis);
-            clearInterval(timer);
+            clearInterval(timerx);
         },
         paused: function() {
             return (millisLeft !== null);
@@ -115,11 +111,12 @@ var timer = (function() {
             startTimer();
         },
         running: function() {
-            return timer && (millisLeft === null);
+            return timerx && (millisLeft === null);
         },
         cancel: function() {
             cancelTimer();
             millisLeft = null;
+            chrome.browserAction.setBadgeText({text: ""});
         }
     }
 })();
