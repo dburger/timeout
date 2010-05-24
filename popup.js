@@ -1,7 +1,6 @@
 $(function() {
     var startButton = $("#startButton");
     var cancelButton = $("#cancelButton");
-    var alarmButton = $("#alarmButton");
     var minutesText = $("#minutesText");
     var timer = chrome.extension.getBackgroundPage().timer;
 
@@ -19,7 +18,7 @@ $(function() {
     var start = function() {
         var minutes = parseInt(minutesText.val());
         try {
-        timer.start(minutes);
+          timer.start(minutes);
         } catch (exc) {
           alert(exc.message);
         }
@@ -37,10 +36,11 @@ $(function() {
     var running = timer.running();
     var paused = timer.paused();
 
-    startButton.value = (running) ? "pause"
+    var startButtonValue = (running) ? "pause"
         : (paused) ? "resume"
         : "start";
-    cancelButton.disabled = !(running || paused);
+    startButton.attr("value", startButtonValue);
+    cancelButton.attr("disabled", !(running || paused));
 
     /*
        Long story short - I would like to be able to do this somewhat like
